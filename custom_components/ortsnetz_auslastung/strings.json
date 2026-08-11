@@ -1,0 +1,22 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Auslastung-Ortsnetz",
+        "description": "Wähle die drei Spannungs-Sensoren und die Ziel-API.",
+        "data": {
+          "api_url": "API-Adresse",
+          "token": "API-Token",
+          "l1_entity": "Sensor L1",
+          "l2_entity": "Sensor L2",
+          "l3_entity": "Sensor L3",
+          "plant_capacity_kwp": "Anlagengröße (kWp)",
+          "pv_forecast_entity": "PV-Forecast heute (kWh)",
+          "grid_frequency_entity": "Netzfrequenz (Hz)",
+          "latitude": "Breitengrad",
+          "longitude": "Längengrad"
+        }
+      }
+    }
+  }
+}

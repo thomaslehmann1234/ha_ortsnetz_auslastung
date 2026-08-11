@@ -1,0 +1,8 @@
+{
+  "domain": "ortsnetz_auslastung",
+  "name": "Auslastung-Ortsnetz",
+  "version": "0.2.0",
+  "config_flow": true,
+  "iot_class": "cloud_push",
+  "requirements": []
+}
