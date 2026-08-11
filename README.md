@@ -2,15 +2,6 @@
 
 Diese Anleitung richtet sich ausschließlich an Personen, die eine Home-Assistant-Instanz betreuen. Die HACS-Integration sendet die drei Phasenspannungen L1, L2 und L3 sowie den Standort deiner Instanz an die Auslastung-Ortsnetz-API. Nach dem ersten Senden werden die Werte alle fünf Minuten übertragen.
 
-## Zuständigkeiten
-
-| Rolle | Zuständig für |
-| --- | --- |
-| Home-Assistant-Admin | HACS-Installation, Neustart, Auswahl der Sensoren, Standortangaben und Eingabe der Zugangsdaten in Home Assistant |
-| Server-Admin | Betrieb der Webanwendung und API, Erstellen/Widerrufen des individuellen API-Tokens, Bereitstellen der öffentlichen API-Adresse und Untersuchung serverseitiger Fehler |
-
-Der Home-Assistant-Admin benötigt keinen SSH- oder Docker-Zugang zum Server.
-
 ## Voraussetzungen
 
 - Home Assistant mit installiertem [HACS](https://hacs.xyz/)
@@ -26,14 +17,13 @@ Die Integration ist nicht für Werte wie `unknown`, `unavailable` oder Text geei
 
 ## 1. Zugangsdaten vom Server-Admin erhalten
 
-Fordere beim Server-Admin diese zwei Angaben an:
+Fordere beim Server-Admin diese Angaben an:
 
-1. **API-Adresse**: `https://auslastung-ortsnetz.blumen38.dedyn.io`
-2. **Persönlicher API-Token** für diese Home-Assistant-Instanz
+1. **Persönlicher API-Token** für diese Home-Assistant-Instanz
 
 Der API-Token kann per E-Mail an [thomas.lehmann@gmx.info](mailto:thomas.lehmann@gmx.info) angefordert werden. Gib dabei bitte einen eindeutigen Namen für deine Home-Assistant-Instanz an, zum Beispiel `ha-berlin-mitte`.
 
-Behandle den API-Token wie ein Passwort. Gib ihn nicht weiter und verwende keinen Test-Token. Bei Verlust oder Verdacht auf Missbrauch fordert der Home-Assistant-Admin beim Server-Admin einen neuen Token an.
+Behandle den API-Token wie ein Passwort. Gib ihn nicht weiter. Bei Verlust oder Verdacht auf Missbrauch fordert der Home-Assistant-Admin beim Server-Admin einen neuen Token an.
 
 ## 2. Integration über HACS herunterladen
 
@@ -68,12 +58,12 @@ Warte, bis Home Assistant wieder vollständig erreichbar ist.
 
    | Feld | Wert |
    | --- | --- |
-   | API-Adresse | `https://auslastung-ortsnetz.blumen38.dedyn.io` – ohne `/v1` am Ende |
+   | API-Adresse | `https://auslastung-ortsnetz.blumen38.dedyn.io` |
    | API-Token | Der vom Server-Admin erhaltene persönliche Token |
    | Sensor L1 | Sensor-Entität für Phase L1 |
    | Sensor L2 | Sensor-Entität für Phase L2 |
    | Sensor L3 | Sensor-Entität für Phase L3 |
-   | Anlagengröße (kWp) | Installierte Nennleistung der PV-Anlage in Kilowatt-Peak, z. B. `9.8` |
+   | Anlagengröße (kWp) | Installierte Nennleistung der PV-Anlage in Kilowatt-Peak, z. B. `9.8` mit Punkt als Trenner|
    | PV-Forecast heute (kWh) | Forecast-Sensor für den erwarteten PV-Ertrag des aktuellen Tages in Kilowattstunden |
    | Netzfrequenz (Hz) | Frequenz-Sensor des Smartmeters, dessen Wert in Hertz geliefert wird |
    | Breitengrad / Längengrad | Standardmäßig der Home-Assistant-Standort; bei Bedarf überschreiben |
