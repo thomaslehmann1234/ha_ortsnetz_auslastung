@@ -24,11 +24,18 @@ def _value(hass: HomeAssistant, entity_id: str) -> float | None:
         return None
 
 
+async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Update existing entries to the current integration name."""
+    if entry.version < 2:
+        hass.config_entries.async_update_entry(entry, title="Ortsnetz-Auslastung", version=2)
+    return True
+
+
 async def _send(hass: HomeAssistant, entry: ConfigEntry) -> None:
     data = entry.data
     values = [_value(hass, data[key]) for key in (CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY)]
     if any(value is None for value in values):
-        _LOGGER.warning("Spannungssensor für Auslastung-Ortsnetz ist nicht verfügbar")
+        _LOGGER.warning("Spannungssensor für Ortsnetz-Auslastung ist nicht verfügbar")
         return
     payload = {
         "observed_at": datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
@@ -41,14 +48,14 @@ async def _send(hass: HomeAssistant, entry: ConfigEntry) -> None:
     if forecast_entity:
         forecast_kwh = _value(hass, forecast_entity)
         if forecast_kwh is None:
-            _LOGGER.warning("PV-Forecast-Sensor für Auslastung-Ortsnetz ist nicht verfügbar")
+            _LOGGER.warning("PV-Forecast-Sensor für Ortsnetz-Auslastung ist nicht verfügbar")
         else:
             payload["pv_forecast_kwh"] = forecast_kwh
     frequency_entity = data.get(CONF_GRID_FREQUENCY_ENTITY)
     if frequency_entity:
         frequency_hz = _value(hass, frequency_entity)
         if frequency_hz is None:
-            _LOGGER.warning("Netzfrequenz-Sensor für Auslastung-Ortsnetz ist nicht verfügbar")
+            _LOGGER.warning("Netzfrequenz-Sensor für Ortsnetz-Auslastung ist nicht verfügbar")
         else:
             payload["grid_frequency_hz"] = frequency_hz
     url = f"{data[CONF_API_URL].rstrip('/')}/v1/measurements"

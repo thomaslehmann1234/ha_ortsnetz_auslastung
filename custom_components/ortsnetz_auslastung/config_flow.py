@@ -8,11 +8,11 @@ from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CON
 
 
 class OrtsnetzConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    VERSION = 1
+    VERSION = 2
 
     async def async_step_user(self, user_input=None):
         if user_input is not None:
-            return self.async_create_entry(title="Auslastung-Ortsnetz", data=user_input)
+            return self.async_create_entry(title="Ortsnetz-Auslastung", data=user_input)
 
         entity_selector = selector.EntitySelector(selector.EntitySelectorConfig(domain="sensor"))
         schema = vol.Schema({

@@ -1,6 +1,6 @@
 # Ortsnetz-Auslastung für Home-Assistant-Admins
 
-Diese Anleitung richtet sich an Personen, die eine Home-Assistant-Instanz betreuen. Die HACS-Integration sendet die drei Phasenspannungen L1, L2 und L3 sowie den Standort deiner Instanz an die Auslastung-Ortsnetz-API. Nach dem ersten Senden werden die Werte alle fünf Minuten übertragen.
+Diese Anleitung richtet sich an Personen, die eine Home-Assistant-Instanz betreuen. Die HACS-Integration sendet die drei Phasenspannungen L1, L2 und L3 sowie den Standort deiner Instanz an die Ortsnetz-Auslastung-API. Nach dem ersten Senden werden die Werte alle fünf Minuten übertragen.
 
 ## Voraussetzungen
 
@@ -37,7 +37,7 @@ Behandle den API-Token wie ein Passwort. Gib ihn nicht weiter. Bei Verlust oder 
    ```
 
 5. Wähle als Kategorie **Integration** und bestätige mit **Hinzufügen**.
-6. Suche nach **Auslastung-Ortsnetz** und wähle **Herunterladen**.
+6. Suche nach **Ortsnetz-Auslastung** und wähle **Herunterladen**.
 
 ## 3. Home Assistant neu starten
 
@@ -53,7 +53,7 @@ Warte, bis Home Assistant wieder vollständig erreichbar ist.
 
 1. Öffne **Einstellungen → Geräte & Dienste**.
 2. Klicke auf **Integration hinzufügen**.
-3. Suche nach **Auslastung-Ortsnetz**.
+3. Suche nach **Ortsnetz-Auslastung**.
 4. Fülle die Felder aus:
 
    | Feld | Wert |
