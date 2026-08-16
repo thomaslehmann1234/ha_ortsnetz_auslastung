@@ -32,7 +32,8 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 async def _send(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    data = entry.data
+    # Options override setup data; the token deliberately remains in entry.data.
+    data = {**entry.data, **entry.options}
     values = [_value(hass, data[key]) for key in (CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY)]
     if any(value is None for value in values):
         _LOGGER.warning("Spannungssensor für Ortsnetz-Auslastung ist nicht verfügbar")

@@ -85,7 +85,7 @@ Nach der Einrichtung sollten die Daten nach spätestens fünf Minuten auf der Ka
 | `Netzfrequenz-Sensor … ist nicht verfügbar` | Der Frequenz-Sensor liefert keinen numerischen Hz-Wert. Entität und Einheit prüfen. |
 | Kein Standort auf der Karte | Mindestens fünf Minuten warten, Karte neu laden und die HA-Protokolle prüfen. Besteht das Problem weiter, Zeitpunkt und Fehlermeldung an den Server-Admin geben. |
 
-Um Token, API-Adresse oder Sensoren zu ändern, entferne die Integration unter **Einstellungen → Geräte & Dienste** und richte sie erneut ein. Der Server-Admin muss nur eingebunden werden, wenn neue Zugangsdaten benötigt werden.
+API-Adresse, Sensoren, Koordinaten und PV-Angaben können nach der Einrichtung unter **Einstellungen → Geräte & Dienste → Ortsnetz-Auslastung → Konfigurieren** angezeigt und geändert werden. Der API-Token wird dort bewusst nicht angezeigt und bleibt unverändert. Für einen neuen Token den Server-Admin kontaktieren.
 
 ## Datenschutz
 
