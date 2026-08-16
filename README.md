@@ -1,12 +1,12 @@
-# Auslastung-Ortsnetz für Home-Assistant-Admins
+# Ortsnetz-Auslastung für Home-Assistant-Admins
 
-Diese Anleitung richtet sich ausschließlich an Personen, die eine Home-Assistant-Instanz betreuen. Die HACS-Integration sendet die drei Phasenspannungen L1, L2 und L3 sowie den Standort deiner Instanz an die Auslastung-Ortsnetz-API. Nach dem ersten Senden werden die Werte alle fünf Minuten übertragen.
+Diese Anleitung richtet sich an Personen, die eine Home-Assistant-Instanz betreuen. Die HACS-Integration sendet die drei Phasenspannungen L1, L2 und L3 sowie den Standort deiner Instanz an die Auslastung-Ortsnetz-API. Nach dem ersten Senden werden die Werte alle fünf Minuten übertragen.
 
 ## Voraussetzungen
 
 - Home Assistant mit installiertem [HACS](https://hacs.xyz/)
 - Drei numerische `sensor`-Entitäten für L1, L2 und L3; die Zustände müssen Voltwerte enthalten, z. B. `229.8`
-- Eine numerische Forecast-Sensor-Entität mit dem erwarteten PV-Tagesertrag in kWh
+- Eine numerische, opionale Forecast-Sensor-Entität mit dem erwarteten PV-Tagesertrag in kWh
 - Eine numerische Sensor-Entität für die Netzfrequenz in Hz, z. B. `50.01`
 - Vom Server-Admin bereitgestellte öffentliche API-Adresse per HTTPS
 - Ein eigener API-Token für genau diese Home-Assistant-Instanz
@@ -58,13 +58,13 @@ Warte, bis Home Assistant wieder vollständig erreichbar ist.
 
    | Feld | Wert |
    | --- | --- |
-   | API-Adresse | `https://auslastung-ortsnetz.blumen38.dedyn.io` |
+   | API-Adresse | `https://www.ortsnetz-auslastung.de` |
    | API-Token | Der vom Server-Admin erhaltene persönliche Token |
    | Sensor L1 | Sensor-Entität für Phase L1 |
    | Sensor L2 | Sensor-Entität für Phase L2 |
    | Sensor L3 | Sensor-Entität für Phase L3 |
    | Anlagengröße (kWp) | Installierte Nennleistung der PV-Anlage in Kilowatt-Peak, z. B. `9.8` mit Punkt als Trenner|
-   | PV-Forecast heute (kWh) | Forecast-Sensor für den erwarteten PV-Ertrag des aktuellen Tages in Kilowattstunden |
+   | PV-Forecast heute (kWh) | Optionaler Forecast-Sensor für den erwarteten PV-Ertrag des aktuellen Tages in Kilowattstunden |
    | Netzfrequenz (Hz) | Frequenz-Sensor des Smartmeters, dessen Wert in Hertz geliefert wird |
    | Breitengrad / Längengrad | Standardmäßig der Home-Assistant-Standort; bei Bedarf überschreiben |
 
