@@ -17,6 +17,13 @@ def _required_field(key: str, validator, values: dict, fallback=None):
     return vol.Required(key), validator
 
 
+def _optional_field(key: str, validator, values: dict):
+    """Show an optional field only with a default when a value was saved."""
+    if values.get(key):
+        return vol.Optional(key, default=values[key]), validator
+    return vol.Optional(key), validator
+
+
 def _settings_schema(hass, values: dict) -> vol.Schema:
     """Build setup and options fields for the token-free measurement API."""
     entity_selector = selector.EntitySelector(selector.EntitySelectorConfig(domain="sensor"))
@@ -30,7 +37,7 @@ def _settings_schema(hass, values: dict) -> vol.Schema:
         (vol.Required(PHASE_VOLTAGES_SECTION), section(vol.Schema(phase_fields), {"collapsed": False})),
         _required_field(CONF_GRID_FREQUENCY_ENTITY, entity_selector, values),
         _required_field(CONF_PLANT_CAPACITY_KWP, vol.All(vol.Coerce(float), vol.Range(min=0.1, max=1000)), values),
-        _required_field(CONF_PV_FORECAST_ENTITY, entity_selector, values),
+        _optional_field(CONF_PV_FORECAST_ENTITY, entity_selector, values),
         (vol.Optional(CONF_LATITUDE, default=values.get(CONF_LATITUDE, hass.config.latitude)), vol.Coerce(float)),
         (vol.Optional(CONF_LONGITUDE, default=values.get(CONF_LONGITUDE, hass.config.longitude)), vol.Coerce(float)),
     ])

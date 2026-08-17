@@ -21,7 +21,7 @@ Nach der ersten erfolgreichen Übertragung legt die Integration zusätzlich die 
 schlechteste Phasenstatus (`Grün`, `Gelb` oder `Rot`); die Attribute `L1`, `L2` und
 `L3` zeigen die Einzelbewertungen. Der Status kommt in der Antwort der bestehenden
 Messübertragung zurück und erzeugt keinen zusätzlichen API-Aufruf.
-- Eine numerische Forecast-Sensor-Entität mit dem erwarteten PV-Tagesertrag in kWh
+- Optional: Eine numerische Forecast-Sensor-Entität mit dem erwarteten PV-Tagesertrag in kWh
 - Eine numerische Sensor-Entität für die Netzfrequenz in Hz, z. B. `50.01`
 - Vom Server-Admin bereitgestellte öffentliche API-Adresse per HTTPS
 
@@ -75,7 +75,7 @@ Warte, bis Home Assistant wieder vollständig erreichbar ist.
 
 Die Integration sendet sofort einen ersten Datensatz und danach alle fünf Minuten. Die Kartenansicht aktualisiert sich im Live-Modus alle 15 Minuten; ein manuelles Neuladen zeigt den neuen Standort sofort.
 
-Der PV-Forecast wird pro Standort und Kalendertag gespeichert. Die Karte berechnet daraus den **Forecast-Ertrag**: `Forecast (kWh) ÷ Anlagengröße (kWp) = kWh/kWp/Tag`.
+Der PV-Forecast kann leer bleiben. Dann werden keine Forecast-Daten übertragen und die Karte zeigt für diesen Standort keinen Forecast-Ertrag. Wenn ein Forecast-Sensor ausgewählt ist, wird sein Wert pro Standort und Kalendertag gespeichert. Die Karte berechnet daraus den **Forecast-Ertrag**: `Forecast (kWh) ÷ Anlagengröße (kWp) = kWh/kWp/Tag`.
 
 ## Prüfung und Fehlerbehebung
 
