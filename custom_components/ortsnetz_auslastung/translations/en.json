@@ -1,0 +1,57 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Local grid utilization",
+        "description": "Select the three voltage sensors and the target API.",
+        "data": {
+          "api_url": "API URL",
+          "token": "API token",
+          "grid_frequency_entity": "Grid frequency (Hz)",
+          "plant_capacity_kwp": "PV system size (kWp)",
+          "pv_forecast_entity": "PV forecast today (kWh) – optional",
+          "latitude": "Latitude",
+          "longitude": "Longitude"
+        },
+        "sections": {
+          "phase_voltages": {
+            "name": "Phase voltages (V)",
+            "description": "Select the three voltage values from your PV system's smart meter.",
+            "data": {
+              "l1_entity": "Phase L1 voltage (V)",
+              "l2_entity": "Phase L2 voltage (V)",
+              "l3_entity": "Phase L3 voltage (V)"
+            }
+          }
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Configure local grid utilization",
+        "description": "Change transmission and sensor settings. The existing API token remains unchanged.",
+        "data": {
+          "api_url": "API URL",
+          "grid_frequency_entity": "Grid frequency (Hz)",
+          "plant_capacity_kwp": "PV system size (kWp)",
+          "pv_forecast_entity": "PV forecast today (kWh) – optional",
+          "latitude": "Latitude",
+          "longitude": "Longitude"
+        },
+        "sections": {
+          "phase_voltages": {
+            "name": "Phase voltages (V)",
+            "description": "Select the three voltage values from your PV system's smart meter.",
+            "data": {
+              "l1_entity": "Phase L1 voltage (V)",
+              "l2_entity": "Phase L2 voltage (V)",
+              "l3_entity": "Phase L3 voltage (V)"
+            }
+          }
+        }
+      }
+    }
+  }
+}

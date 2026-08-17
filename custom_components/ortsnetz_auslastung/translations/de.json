@@ -1,0 +1,57 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Ortsnetz-Auslastung",
+        "description": "Wähle die drei Spannungs-Sensoren und die Ziel-API.",
+        "data": {
+          "api_url": "API-Adresse",
+          "token": "API-Token",
+          "grid_frequency_entity": "Netzfrequenz (Hz)",
+          "plant_capacity_kwp": "Anlagengröße (kWp)",
+          "pv_forecast_entity": "PV-Forecast heute (kWh) – optional",
+          "latitude": "Breitengrad",
+          "longitude": "Längengrad"
+        },
+        "sections": {
+          "phase_voltages": {
+            "name": "Phasenspannungen (V)",
+            "description": "Wähle die drei Spannungswerte vom Smartmeter deiner PV-Anlage.",
+            "data": {
+              "l1_entity": "Netzspannung Phase L1 (V)",
+              "l2_entity": "Netzspannung Phase L2 (V)",
+              "l3_entity": "Netzspannung Phase L3 (V)"
+            }
+          }
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Ortsnetz-Auslastung konfigurieren",
+        "description": "Ändere die Übertragungs- und Sensor-Einstellungen. Der bestehende API-Token bleibt unverändert.",
+        "data": {
+          "api_url": "API-Adresse",
+          "grid_frequency_entity": "Netzfrequenz (Hz)",
+          "plant_capacity_kwp": "Anlagengröße (kWp)",
+          "pv_forecast_entity": "PV-Forecast heute (kWh) – optional",
+          "latitude": "Breitengrad",
+          "longitude": "Längengrad"
+        },
+        "sections": {
+          "phase_voltages": {
+            "name": "Phasenspannungen (V)",
+            "description": "Wähle die drei Spannungswerte vom Smartmeter deiner PV-Anlage.",
+            "data": {
+              "l1_entity": "Netzspannung Phase L1 (V)",
+              "l2_entity": "Netzspannung Phase L2 (V)",
+              "l3_entity": "Netzspannung Phase L3 (V)"
+            }
+          }
+        }
+      }
+    }
+  }
+}
