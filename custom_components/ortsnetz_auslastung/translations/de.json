@@ -6,7 +6,6 @@
         "description": "Wähle die drei Spannungs-Sensoren und die Ziel-API.",
         "data": {
           "api_url": "API-Adresse",
-          "token": "API-Token",
           "grid_frequency_entity": "Netzfrequenz (Hz)",
           "plant_capacity_kwp": "Anlagengröße (kWp)",
           "pv_forecast_entity": "PV-Forecast heute (kWh) – optional",
@@ -31,7 +30,7 @@
     "step": {
       "init": {
         "title": "Ortsnetz-Auslastung konfigurieren",
-        "description": "Ändere die Übertragungs- und Sensor-Einstellungen. Der bestehende API-Token bleibt unverändert.",
+        "description": "Ändere die Übertragungs- und Sensor-Einstellungen.",
         "data": {
           "api_url": "API-Adresse",
           "grid_frequency_entity": "Netzfrequenz (Hz)",

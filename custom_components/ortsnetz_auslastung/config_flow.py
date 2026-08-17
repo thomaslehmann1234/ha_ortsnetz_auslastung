@@ -5,7 +5,7 @@ from homeassistant import config_entries
 from homeassistant.data_entry_flow import section
 from homeassistant.helpers import selector
 
-from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, CONF_TOKEN, DOMAIN
+from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, DOMAIN
 
 PHASE_VOLTAGES_SECTION = "phase_voltages"
 
@@ -17,8 +17,8 @@ def _required_field(key: str, validator, values: dict, fallback=None):
     return vol.Required(key), validator
 
 
-def _settings_schema(hass, values: dict, *, include_token: bool) -> vol.Schema:
-    """Build setup/options fields; the token is never a configurable option."""
+def _settings_schema(hass, values: dict) -> vol.Schema:
+    """Build setup and options fields for the token-free measurement API."""
     entity_selector = selector.EntitySelector(selector.EntitySelectorConfig(domain="sensor"))
     phase_fields = dict([
         _required_field(CONF_L1_ENTITY, entity_selector, values),
@@ -34,8 +34,6 @@ def _settings_schema(hass, values: dict, *, include_token: bool) -> vol.Schema:
         (vol.Optional(CONF_LATITUDE, default=values.get(CONF_LATITUDE, hass.config.latitude)), vol.Coerce(float)),
         (vol.Optional(CONF_LONGITUDE, default=values.get(CONF_LONGITUDE, hass.config.longitude)), vol.Coerce(float)),
     ])
-    if include_token:
-        fields = dict([(vol.Required(CONF_TOKEN), str), *fields.items()])
     return vol.Schema(fields)
 
 
@@ -47,13 +45,13 @@ def _flatten_sections(user_input: dict) -> dict:
 
 
 class OrtsnetzConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    VERSION = 2
+    VERSION = 3
 
     async def async_step_user(self, user_input=None):
         if user_input is not None:
             return self.async_create_entry(title="Ortsnetz-Auslastung", data=_flatten_sections(user_input))
 
-        return self.async_show_form(step_id="user", data_schema=_settings_schema(self.hass, {}, include_token=True))
+        return self.async_show_form(step_id="user", data_schema=_settings_schema(self.hass, {}))
 
     @staticmethod
     def async_get_options_flow(config_entry):
@@ -70,5 +68,5 @@ class OrtsnetzOptionsFlow(config_entries.OptionsFlow):
         values = {**self.config_entry.data, **self.config_entry.options}
         return self.async_show_form(
             step_id="init",
-            data_schema=_settings_schema(self.hass, values, include_token=False),
+            data_schema=_settings_schema(self.hass, values),
         )

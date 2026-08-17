@@ -1,6 +1,5 @@
 DOMAIN = "ortsnetz_auslastung"
 CONF_API_URL = "api_url"
-CONF_TOKEN = "token"
 CONF_L1_ENTITY = "l1_entity"
 CONF_L2_ENTITY = "l2_entity"
 CONF_L3_ENTITY = "l3_entity"

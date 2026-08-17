@@ -9,7 +9,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.event import async_track_time_interval
 
-from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, CONF_TOKEN, DOMAIN
+from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -26,13 +26,15 @@ def _value(hass: HomeAssistant, entity_id: str) -> float | None:
 
 async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Update existing entries to the current integration name."""
-    if entry.version < 2:
-        hass.config_entries.async_update_entry(entry, title="Ortsnetz-Auslastung", version=2)
+    if entry.version < 3:
+        data = dict(entry.data)
+        data.pop("token", None)
+        hass.config_entries.async_update_entry(entry, title="Ortsnetz-Auslastung", data=data, version=3)
     return True
 
 
 async def _send(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    # Options override setup data; the token deliberately remains in entry.data.
+    # Options override the initial setup data.
     data = {**entry.data, **entry.options}
     values = [_value(hass, data[key]) for key in (CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY)]
     if any(value is None for value in values):
@@ -63,7 +65,7 @@ async def _send(hass: HomeAssistant, entry: ConfigEntry) -> None:
     session = async_get_clientsession(hass)
     for attempt in range(2):
         try:
-            async with session.post(url, json=payload, headers={"Authorization": f"Bearer {data[CONF_TOKEN]}"}, timeout=10) as response:
+            async with session.post(url, json=payload, timeout=10) as response:
                 if response.status < 300:
                     return
                 _LOGGER.warning("Ortsnetz-API antwortete mit HTTP %s", response.status)
