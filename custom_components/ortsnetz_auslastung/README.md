@@ -28,7 +28,7 @@ Die Integration ist nicht für Werte wie `unknown`, `unavailable` oder Text geei
 
 Fordere beim Server-Admin diese zwei Angaben an:
 
-1. **API-Adresse**: `https://auslastung-ortsnetz.blumen38.dedyn.io`
+1. **API-Adresse**: `https://www.ortsnetz-auslastung.de`
 2. **Persönlicher API-Token** für diese Home-Assistant-Instanz
 
 Der API-Token kann per E-Mail an [thomas.lehmann@gmx.info](mailto:thomas.lehmann@gmx.info) angefordert werden. Gib dabei bitte einen eindeutigen Namen für deine Home-Assistant-Instanz an, zum Beispiel `ha-berlin-mitte`.
@@ -68,13 +68,13 @@ Warte, bis Home Assistant wieder vollständig erreichbar ist.
 
    | Feld | Wert |
    | --- | --- |
-   | API-Adresse | `https://auslastung-ortsnetz.blumen38.dedyn.io` – ohne `/v1` am Ende |
+   | API-Adresse | `https://www.ortsnetz-auslastung.de` |
    | API-Token | Der vom Server-Admin erhaltene persönliche Token |
    | Sensor L1 | Sensor-Entität für Phase L1 |
    | Sensor L2 | Sensor-Entität für Phase L2 |
    | Sensor L3 | Sensor-Entität für Phase L3 |
    | Anlagengröße (kWp) | Installierte Nennleistung der PV-Anlage in Kilowatt-Peak, z. B. `9.8` |
-   | PV-Forecast heute (kWh) | Forecast-Sensor für den erwarteten PV-Ertrag des aktuellen Tages in Kilowattstunden |
+   | PV-Forecast heute (kWh) | Optionaler Forecast-Sensor für den erwarteten PV-Ertrag des aktuellen Tages in Kilowattstunden |
    | Netzfrequenz (Hz) | Frequenz-Sensor des Smartmeters, dessen Wert in Hertz geliefert wird |
    | Breitengrad / Längengrad | Standardmäßig der Home-Assistant-Standort; bei Bedarf überschreiben |
 

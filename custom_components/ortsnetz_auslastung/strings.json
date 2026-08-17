@@ -7,14 +7,22 @@
         "data": {
           "api_url": "API-Adresse",
           "token": "API-Token",
-          "l1_entity": "Sensor L1",
-          "l2_entity": "Sensor L2",
-          "l3_entity": "Sensor L3",
-          "plant_capacity_kwp": "Anlagengröße (kWp)",
-          "pv_forecast_entity": "PV-Forecast heute (kWh)",
           "grid_frequency_entity": "Netzfrequenz (Hz)",
+          "plant_capacity_kwp": "Anlagengröße (kWp)",
+          "pv_forecast_entity": "PV-Forecast heute (kWh) - optional",
           "latitude": "Breitengrad",
           "longitude": "Längengrad"
+        },
+        "sections": {
+          "phase_voltages": {
+            "name": "Phasenspannungen (V)",
+            "description": "Wähle die drei Spannungswerte vom Smartmeter deiner PV-Anlage.",
+            "data": {
+              "l1_entity": "Netzspannung Phase L1 (V)",
+              "l2_entity": "Netzspannung Phase L2 (V)",
+              "l3_entity": "Netzspannung Phase L3 (V)"
+            }
+          }
         }
       }
     }
@@ -26,14 +34,22 @@
         "description": "Ändere die Übertragungs- und Sensor-Einstellungen. Der bestehende API-Token bleibt unverändert.",
         "data": {
           "api_url": "API-Adresse",
-          "l1_entity": "Sensor L1",
-          "l2_entity": "Sensor L2",
-          "l3_entity": "Sensor L3",
-          "plant_capacity_kwp": "Anlagengröße (kWp)",
-          "pv_forecast_entity": "PV-Forecast heute (kWh)",
           "grid_frequency_entity": "Netzfrequenz (Hz)",
+          "plant_capacity_kwp": "Anlagengröße (kWp)",
+          "pv_forecast_entity": "PV-Forecast heute (kWh) - optional",
           "latitude": "Breitengrad",
           "longitude": "Längengrad"
+        },
+        "sections": {
+          "phase_voltages": {
+            "name": "Phasenspannungen (V)",
+            "description": "Wähle die drei Spannungswerte vom Smartmeter deiner PV-Anlage.",
+            "data": {
+              "l1_entity": "Netzspannung Phase L1 (V)",
+              "l2_entity": "Netzspannung Phase L2 (V)",
+              "l3_entity": "Netzspannung Phase L3 (V)"
+            }
+          }
         }
       }
     }
