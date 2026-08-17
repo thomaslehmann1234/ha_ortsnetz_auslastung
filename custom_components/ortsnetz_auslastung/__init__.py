@@ -7,9 +7,10 @@ from datetime import UTC, datetime, timedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.event import async_track_time_interval
 
-from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, DOMAIN
+from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, DOMAIN, PLATFORMS, status_signal
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -67,6 +68,12 @@ async def _send(hass: HomeAssistant, entry: ConfigEntry) -> None:
         try:
             async with session.post(url, json=payload, timeout=10) as response:
                 if response.status < 300:
+                    result = await response.json(content_type=None)
+                    status = result.get("status") if isinstance(result, dict) else None
+                    if isinstance(status, dict) and all(status.get(key) in {"green", "yellow", "red"} for key in ("l1", "l2", "l3", "overall")):
+                        async_dispatcher_send(hass, status_signal(entry.entry_id), status)
+                    else:
+                        _LOGGER.debug("Ortsnetz-API lieferte noch keinen Spannungsstatus")
                     return
                 _LOGGER.warning("Ortsnetz-API antwortete mit HTTP %s", response.status)
         except (asyncio.TimeoutError, OSError) as error:
@@ -77,6 +84,7 @@ async def _send(hass: HomeAssistant, entry: ConfigEntry) -> None:
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data.setdefault(DOMAIN, {})
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     async def scheduled_send(_: datetime) -> None:
         """Send from Home Assistant's event loop at each interval."""
@@ -92,4 +100,4 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     cancel = hass.data.get(DOMAIN, {}).pop(entry.entry_id, None)
     if cancel:
         cancel()
-    return True
+    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)

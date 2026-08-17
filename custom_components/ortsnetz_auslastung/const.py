@@ -8,3 +8,8 @@ CONF_LONGITUDE = "longitude"
 CONF_PLANT_CAPACITY_KWP = "plant_capacity_kwp"
 CONF_PV_FORECAST_ENTITY = "pv_forecast_entity"
 CONF_GRID_FREQUENCY_ENTITY = "grid_frequency_entity"
+PLATFORMS = ["sensor"]
+
+
+def status_signal(entry_id: str) -> str:
+    return f"{DOMAIN}_{entry_id}_status"

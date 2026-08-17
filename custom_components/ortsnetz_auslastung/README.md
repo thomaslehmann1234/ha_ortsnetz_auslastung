@@ -15,6 +15,12 @@ Der Home-Assistant-Admin benötigt keinen SSH- oder Docker-Zugang zum Server.
 
 - Home Assistant mit installiertem [HACS](https://hacs.xyz/)
 - Drei numerische `sensor`-Entitäten für L1, L2 und L3; die Zustände müssen Voltwerte enthalten, z. B. `229.8`
+
+Nach der ersten erfolgreichen Übertragung legt die Integration zusätzlich die Entität
+**Netzspannungsstatus** an. Ihr Zustand ist der jeweils
+schlechteste Phasenstatus (`Grün`, `Gelb` oder `Rot`); die Attribute `L1`, `L2` und
+`L3` zeigen die Einzelbewertungen. Der Status kommt in der Antwort der bestehenden
+Messübertragung zurück und erzeugt keinen zusätzlichen API-Aufruf.
 - Eine numerische Forecast-Sensor-Entität mit dem erwarteten PV-Tagesertrag in kWh
 - Eine numerische Sensor-Entität für die Netzfrequenz in Hz, z. B. `50.01`
 - Vom Server-Admin bereitgestellte öffentliche API-Adresse per HTTPS
