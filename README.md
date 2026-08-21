@@ -2,6 +2,10 @@
 
 Diese Anleitung richtet sich an Personen, die eine Home-Assistant-Instanz betreuen. Die HACS-Integration sendet die drei Phasenspannungen L1, L2 und L3 sowie den Standort deiner Instanz an die Ortsnetz-Auslastung-API. Nach dem ersten Senden werden die Werte alle fünf Minuten übertragen.
 
+## Ortsnetz-Auslastung
+
+[Ortsnetz-Auslastung](https://www.ortsnetz-auslastung.de) visualisiert Spannungsmessungen, Netzfrequenzen und standortübergreifende Statistiken aus freiwillig teilnehmenden PV-Anlagen in Deutschland.
+
 ## Voraussetzungen
 
 - Home Assistant mit installiertem [HACS](https://hacs.xyz/)
@@ -84,3 +88,7 @@ API-Adresse, Sensoren, Koordinaten und PV-Angaben können nach der Einrichtung u
 ## Datenschutz
 
 Die Integration übermittelt Koordinaten, Zeitstempel, die drei Spannungswerte, Netzfrequenz sowie Angaben zu PV-Anlage und Forecast. Die öffentliche Karte zeigt Koordinaten nur gerastert mit etwa 100 Metern Genauigkeit. Verwende bei Bedarf die überschreibbaren Koordinaten, um einen alternativen Standort zu senden.
+
+## Kontakt
+
+Fragen zur Integration, zur Datenübermittlung oder zu einem Standort bitte an [thomas.lehmann@gmx.info](mailto:thomas.lehmann@gmx.info).
