@@ -36,7 +36,7 @@ def _settings_schema(hass, values: dict) -> vol.Schema:
         _required_field(CONF_API_URL, str, values, "https://www.ortsnetz-auslastung.de"),
         (vol.Required(PHASE_VOLTAGES_SECTION), section(vol.Schema(phase_fields), {"collapsed": False})),
         _required_field(CONF_GRID_FREQUENCY_ENTITY, entity_selector, values),
-        _required_field(CONF_PLANT_CAPACITY_KWP, vol.All(vol.Coerce(float), vol.Range(min=0.1, max=1000)), values),
+        _optional_field(CONF_PLANT_CAPACITY_KWP, vol.All(vol.Coerce(float), vol.Range(min=0.1, max=1000)), values),
         _optional_field(CONF_PV_FORECAST_ENTITY, entity_selector, values),
         (vol.Optional(CONF_LATITUDE, default=values.get(CONF_LATITUDE, hass.config.latitude)), vol.Coerce(float)),
         (vol.Optional(CONF_LONGITUDE, default=values.get(CONF_LONGITUDE, hass.config.longitude)), vol.Coerce(float)),

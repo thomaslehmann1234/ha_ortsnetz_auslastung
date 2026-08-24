@@ -10,7 +10,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.event import async_track_time_interval
 
-from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, DOMAIN, PLATFORMS, status_signal
+from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, DOMAIN, MAX_PHASE_VOLTAGE_V, MIN_PHASE_VOLTAGE_V, PLATFORMS, status_signal
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -40,6 +40,18 @@ async def _send(hass: HomeAssistant, entry: ConfigEntry) -> None:
     values = [_value(hass, data[key]) for key in (CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY)]
     if any(value is None for value in values):
         _LOGGER.warning("Spannungssensor für Ortsnetz-Auslastung ist nicht verfügbar")
+        return
+    invalid_phases = [
+        f"L{index}={value:g} V"
+        for index, value in enumerate(values, start=1)
+        if value < MIN_PHASE_VOLTAGE_V or value > MAX_PHASE_VOLTAGE_V
+    ]
+    if invalid_phases:
+        _LOGGER.error(
+            "Ortsnetz-Auslastung sendet keine Messung: unplausible Phasenspannung (%s). "
+            "Erwartet werden Werte zwischen %g und %g V; Sensor-Auswahl und Einheit prüfen.",
+            ", ".join(invalid_phases), MIN_PHASE_VOLTAGE_V, MAX_PHASE_VOLTAGE_V,
+        )
         return
     payload = {
         "observed_at": datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
