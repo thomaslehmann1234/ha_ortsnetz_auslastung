@@ -12,7 +12,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import status_signal
 
-_LABELS = {"green": "Grün", "yellow": "Gelb", "red": "Rot"}
+_LABELS = {"green": "Normal", "yellow": "Warnung", "red": "Kritisch"}
 
 
 async def async_setup_entry(

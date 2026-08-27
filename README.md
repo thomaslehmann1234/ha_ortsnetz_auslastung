@@ -13,7 +13,7 @@ Diese Anleitung richtet sich an Personen, die eine Home-Assistant-Instanz betreu
 
 Nach der ersten erfolgreichen Übertragung legt die Integration zusätzlich die Entität
 **Netzspannungsstatus** an. Ihr Zustand ist der jeweils
-schlechteste Phasenstatus (`Grün`, `Gelb` oder `Rot`); die Attribute `L1`, `L2` und
+schlechteste Phasenstatus (`Normal`, `Warnung` oder `Kritisch`); die Attribute `L1`, `L2` und
 `L3` zeigen die Einzelbewertungen. Der Status kommt in der Antwort der bestehenden
 Messübertragung zurück und erzeugt keinen zusätzlichen API-Aufruf.
 - Optional: Eine numerische Forecast-Sensor-Entität mit dem erwarteten PV-Tagesertrag in kWh
