@@ -5,7 +5,7 @@ from homeassistant import config_entries
 from homeassistant.data_entry_flow import section
 from homeassistant.helpers import selector
 
-from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, DOMAIN
+from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, CONF_SMARTMETER_MODEL, DOMAIN
 
 PHASE_VOLTAGES_SECTION = "phase_voltages"
 
@@ -38,6 +38,7 @@ def _settings_schema(hass, values: dict) -> vol.Schema:
         _required_field(CONF_GRID_FREQUENCY_ENTITY, entity_selector, values),
         _optional_field(CONF_PLANT_CAPACITY_KWP, vol.All(vol.Coerce(float), vol.Range(min=0.1, max=1000)), values),
         _optional_field(CONF_PV_FORECAST_ENTITY, entity_selector, values),
+        _optional_field(CONF_SMARTMETER_MODEL, vol.All(str, vol.Length(max=120)), values),
         (vol.Optional(CONF_LATITUDE, default=values.get(CONF_LATITUDE, hass.config.latitude)), vol.Coerce(float)),
         (vol.Optional(CONF_LONGITUDE, default=values.get(CONF_LONGITUDE, hass.config.longitude)), vol.Coerce(float)),
     ])

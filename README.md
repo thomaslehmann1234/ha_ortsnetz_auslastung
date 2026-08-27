@@ -65,6 +65,7 @@ Warte, bis Home Assistant wieder vollständig erreichbar ist.
    | Sensor L3 | Sensor-Entität für Phase L3 |
    | Anlagengröße (kWp) | Optional. Installierte Nennleistung der PV-Anlage in Kilowatt-Peak, z. B. `9.8` mit Punkt als Trenner. Nur mit Anlagengröße kann der Forecast-Ertrag in kWh/kWp/Tag berechnet werden. |
    | PV-Forecast heute (kWh) | Optionaler Forecast-Sensor für den erwarteten PV-Ertrag des aktuellen Tages in Kilowattstunden |
+   | Smartmeter Hersteller / Typ | Optionaler Freitext, z. B. Hersteller und Modell des Smartmeters. Er wird nur im Adminbereich der Ortsnetz-Auslastung angezeigt. |
    | Netzfrequenz (Hz) | Frequenz-Sensor des Smartmeters, dessen Wert in Hertz geliefert wird |
    | Breitengrad / Längengrad | Standardmäßig der Home-Assistant-Standort; bei Bedarf überschreiben |
 
@@ -89,7 +90,7 @@ API-Adresse, Sensoren, Koordinaten und PV-Angaben können nach der Einrichtung u
 
 ## Datenschutz
 
-Die Integration übermittelt Koordinaten, Zeitstempel, die drei Spannungswerte, Netzfrequenz sowie Angaben zu PV-Anlage und Forecast. Die öffentliche Karte zeigt Koordinaten nur gerastert mit etwa 100 Metern Genauigkeit. Verwende bei Bedarf die überschreibbaren Koordinaten, um einen alternativen Standort zu senden.
+Die Integration übermittelt Koordinaten, Zeitstempel, die drei Spannungswerte, Netzfrequenz sowie Angaben zu PV-Anlage und Forecast. Optional wird Hersteller und Typ des Smartmeters übertragen; diese Angabe ist ausschließlich im geschützten Adminbereich sichtbar. Die öffentliche Karte zeigt Koordinaten nur gerastert mit etwa 100 Metern Genauigkeit. Verwende bei Bedarf die überschreibbaren Koordinaten, um einen alternativen Standort zu senden.
 
 ## Kontakt
 
