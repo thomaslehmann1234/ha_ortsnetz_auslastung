@@ -6,7 +6,7 @@ from typing import Any
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -57,6 +57,8 @@ class VoltageStatusSensor(SensorEntity):
             async_dispatcher_connect(self.hass, status_signal(self._entry.entry_id), self._async_update_status)
         )
 
+    @callback
     def _async_update_status(self, status: dict[str, str]) -> None:
+        """Store a dispatcher update in Home Assistant's event loop."""
         self._status = status
         self.async_write_ha_state()
