@@ -12,8 +12,12 @@ CONF_GRID_FREQUENCY_ENTITY = "grid_frequency_entity"
 PLATFORMS = ["sensor"]
 MIN_PHASE_VOLTAGE_V = 150.0
 MAX_PHASE_VOLTAGE_V = 300.0
-INTEGRATION_VERSION = "0.3.6"
+INTEGRATION_VERSION = "0.3.7"
 
 
 def status_signal(entry_id: str) -> str:
     return f"{DOMAIN}_{entry_id}_status"
+
+
+def storage_recommendation_signal(entry_id: str) -> str:
+    return f"{DOMAIN}_{entry_id}_storage_recommendation"

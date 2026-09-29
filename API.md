@@ -56,11 +56,14 @@ Bei Erfolg antwortet der Server mit `202 Accepted`:
     "l2": "green",
     "l3": "green",
     "overall": "green"
-  }
+  },
+  "storage_recommendation": "none"
 }
 ```
 
 `created` ist `false`, wenn derselbe Messwert bereits verarbeitet wurde. Die Statuswerte sind `green`, `yellow` oder `red`; `overall` ist die schlechteste Bewertung einer Phase.
+
+`storage_recommendation` ist `charge` bei Überspannung, `discharge` bei Unterspannung und `none` bei normaler Spannung. Liegen Über- und Unterspannung gleichzeitig vor, hat `discharge` Vorrang.
 
 | HTTP-Status | Bedeutung |
 | --- | --- |

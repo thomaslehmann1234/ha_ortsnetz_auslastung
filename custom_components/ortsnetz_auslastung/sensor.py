@@ -10,9 +10,10 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import status_signal
+from .const import status_signal, storage_recommendation_signal
 
 _LABELS = {"green": "Normal", "yellow": "Warnung", "red": "Kritisch"}
+_RECOMMENDATION_LABELS = {"charge": "Laden", "discharge": "Entladen", "none": "Keine Aktion"}
 
 
 async def async_setup_entry(
@@ -20,8 +21,8 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Add the single lightweight status sensor."""
-    async_add_entities([VoltageStatusSensor(entry)])
+    """Add the voltage status and storage recommendation sensors."""
+    async_add_entities([VoltageStatusSensor(entry), BatteryStorageRecommendationSensor(entry)])
 
 
 class VoltageStatusSensor(SensorEntity):
@@ -61,4 +62,38 @@ class VoltageStatusSensor(SensorEntity):
     def _async_update_status(self, status: dict[str, str]) -> None:
         """Store a dispatcher update in Home Assistant's event loop."""
         self._status = status
+        self.async_write_ha_state()
+
+
+class BatteryStorageRecommendationSensor(SensorEntity):
+    """Expose the API's battery storage recommendation."""
+
+    _attr_has_entity_name = True
+    _attr_name = "Batteriespeicherempfehlung"
+    _attr_icon = "mdi:battery-sync-outline"
+
+    def __init__(self, entry: ConfigEntry) -> None:
+        self._attr_unique_id = f"{entry.entry_id}_storage_recommendation"
+        self._entry = entry
+        self._recommendation: str | None = None
+
+    @property
+    def native_value(self) -> str | None:
+        if self._recommendation is None:
+            return None
+        return _RECOMMENDATION_LABELS[self._recommendation]
+
+    async def async_added_to_hass(self) -> None:
+        self.async_on_remove(
+            async_dispatcher_connect(
+                self.hass,
+                storage_recommendation_signal(self._entry.entry_id),
+                self._async_update_recommendation,
+            )
+        )
+
+    @callback
+    def _async_update_recommendation(self, recommendation: str) -> None:
+        """Store a dispatcher update in Home Assistant's event loop."""
+        self._recommendation = recommendation
         self.async_write_ha_state()

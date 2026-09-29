@@ -10,7 +10,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.event import async_track_time_interval
 
-from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, CONF_SMARTMETER_MODEL, DOMAIN, INTEGRATION_VERSION, MAX_PHASE_VOLTAGE_V, MIN_PHASE_VOLTAGE_V, PLATFORMS, status_signal
+from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, CONF_SMARTMETER_MODEL, DOMAIN, INTEGRATION_VERSION, MAX_PHASE_VOLTAGE_V, MIN_PHASE_VOLTAGE_V, PLATFORMS, status_signal, storage_recommendation_signal
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -90,6 +90,9 @@ async def _send(hass: HomeAssistant, entry: ConfigEntry) -> None:
                         async_dispatcher_send(hass, status_signal(entry.entry_id), status)
                     else:
                         _LOGGER.debug("Ortsnetz-API lieferte noch keinen Spannungsstatus")
+                    recommendation = result.get("storage_recommendation") if isinstance(result, dict) else None
+                    if recommendation in {"charge", "discharge", "none"}:
+                        async_dispatcher_send(hass, storage_recommendation_signal(entry.entry_id), recommendation)
                     return
                 _LOGGER.warning("Ortsnetz-API antwortete mit HTTP %s", response.status)
         except (asyncio.TimeoutError, OSError) as error:

@@ -11,11 +11,8 @@ Diese Anleitung richtet sich an Personen, die eine Home-Assistant-Instanz betreu
 - Home Assistant mit installiertem [HACS](https://hacs.xyz/)
 - Drei numerische `sensor`-Entitäten für L1, L2 und L3; die Zustände müssen Voltwerte enthalten, z. B. `229.8`
 
-Nach der ersten erfolgreichen Übertragung legt die Integration zusätzlich die Entität
-**Netzspannungsstatus** an. Ihr Zustand ist der jeweils
-schlechteste Phasenstatus (`Normal`, `Warnung` oder `Kritisch`); die Attribute `L1`, `L2` und
-`L3` zeigen die Einzelbewertungen. Der Status kommt in der Antwort der bestehenden
-Messübertragung zurück und erzeugt keinen zusätzlichen API-Aufruf.
+Nach der ersten erfolgreichen Übertragung legt die Integration zusätzlich die Entitäten **Netzspannungsstatus** und **Batteriespeicherempfehlung** an. Der Netzspannungsstatus ist der jeweils schlechteste Phasenstatus (`Normal`, `Warnung` oder `Kritisch`); die Attribute `L1`, `L2` und `L3` zeigen die Einzelbewertungen. Die Batteriespeicherempfehlung ist bei Überspannung `Laden`, bei Unterspannung `Entladen` und bei normaler Spannung `Keine Aktion`. Bei gleichzeitiger Über- und Unterspannung hat `Entladen` Vorrang. Beide Werte kommen in der Antwort der bestehenden Messübertragung zurück und erzeugen keinen zusätzlichen API-Aufruf.
+
 - Optional: Eine numerische Forecast-Sensor-Entität mit dem erwarteten PV-Tagesertrag in kWh
 - Eine numerische Sensor-Entität für die Netzfrequenz in Hz, z. B. `50.01`
 - Vom Server-Admin bereitgestellte öffentliche API-Adresse per HTTPS
