@@ -25,8 +25,8 @@ Die drei Phasenspannungen werden zusätzlich auf einen plausiblen Bereich von 15
 
 ## 1. Integration über HACS herunterladen
 
-1. Öffne in Home Assistant **HACS**.
-2. Wähle **Integrationen**.
+1. Öffne Home Assistant.
+2. Wähle **HACS**, rechts aus der Menuleiste.
 3. Öffne oben rechts das Menü mit den drei Punkten und wähle **Benutzerdefinierte Repositories**.
 4. Trage als Repository-URL ein:
 

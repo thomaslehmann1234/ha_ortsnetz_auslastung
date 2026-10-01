@@ -1,51 +1,54 @@
-# API: Messwerte übertragen
+# API-Beschreibung
 
-Diese Dokumentation beschreibt den öffentlichen Endpunkt für www.ortsnetz-auslastung.de darüber kommunizieren Clients wie Home Assistant, Shelly Scripts und eigene Anwendungen. 
-
-## Endpunkt
+## Endpoint
 
 ```text
 POST https://www.ortsnetz-auslastung.de/v1/measurements
 Content-Type: application/json
 ```
 
-Für die Messwertübertragung ist keine Anmeldung. Ein Messpunkt wird anhand seiner Koordinaten zugeordnet. Sende je Messpunkt höchstens einmal alle fünf Minuten.
+Der Endpoint ist öffentlich und benötigt keine Authentifizierung. Jede Messung wird einzeln übertragen.
 
-## Request
+## Request-Felder
 
-| Feld | Typ | Pflicht | Regeln |
+| Feld | Typ | Pflicht | Beschreibung |
 | --- | --- | --- | --- |
-| `observed_at` | String | Ja | ISO 8601 mit Zeitzone, z. B. `2026-09-14T10:15:00Z`; höchstens 15 Minuten in der Zukunft |
-| `latitude` | Zahl | Ja | −90 bis 90 |
-| `longitude` | Zahl | Ja | −180 bis 180 |
-| `l1_v` | Zahl | Ja | größer 0, höchstens 500; empfohlen: 150–300 V |
-| `l2_v` | Zahl | Ja | größer 0, höchstens 500; empfohlen: 150–300 V |
-| `l3_v` | Zahl | Ja | größer 0, höchstens 500; empfohlen: 150–300 V |
-| `grid_frequency_hz` | Zahl | Nein | 45–55 Hz |
-| `plant_capacity_kwp` | Zahl | Nein | größer 0, höchstens 1000 |
-| `pv_forecast_kwh` | Zahl | Nein | 0–100000 |
-| `smartmeter_model` | String | Nein | maximal 120 Zeichen |
-| `integration_version` | String | Nein | maximal 32 Zeichen |
+| `observed_at` | String | Ja | ISO-8601-Zeitstempel mit Zeitzone, bevorzugt UTC, z. B. `2026-09-15T08:00:00Z` |
+| `latitude` | Zahl | Ja | Breitengrad von -90 bis 90 |
+| `longitude` | Zahl | Ja | Längengrad von -180 bis 180 |
+| `l1_v` | Zahl | Ja | Spannung Phase L1 in Volt, größer als 0 und maximal 500 |
+| `l2_v` | Zahl | Ja | Spannung Phase L2 in Volt, größer als 0 und maximal 500; bei einphasigen Messungen `-1` |
+| `l3_v` | Zahl | Ja | Spannung Phase L3 in Volt, größer als 0 und maximal 500; bei einphasigen Messungen `-1` |
+| `grid_frequency_hz` | Zahl | Nein | Netzfrequenz in Hertz, 45 bis 55 |
+| `plant_capacity_kwp` | Zahl | Nein | Installierte PV-Leistung in kWp, größer als 0 und maximal 1000 |
+| `pv_forecast_kwh` | Zahl | Nein | heutige Gesamt PV-Prognose in kWh, 0 bis 100000 |
+| `smartmeter_model` | String | Nein | Freie Bezeichnung des Messgeräts, maximal 120 Zeichen |
+| `integration_version` | String | Nein | Kennung der Integration, maximal 32 Zeichen |
 
-Beispiel:
+## Beispiel
 
 ```json
 {
-  "observed_at": "2026-09-14T10:15:00Z",
+  "observed_at": "2026-09-15T08:00:00Z",
   "latitude": 52.520008,
   "longitude": 13.404954,
-  "l1_v": 229.8,
-  "l2_v": 230.1,
-  "l3_v": 230.0,
-  "grid_frequency_hz": 50.01,
-  "smartmeter_model": "Shelly Pro 3EM",
-  "integration_version": "shelly-0.1.0"
+  "l1_v": 230.1,
+  "l2_v": 229.9,
+  "l3_v": 230.4,
+  "grid_frequency_hz": 50.0,
+  "integration_version": "iobroker-0.1.0"
 }
 ```
 
-## Response
+## Responses
 
-Bei Erfolg antwortet der Server mit `202 Accepted`:
+| Status | Bedeutung |
+| --- | --- |
+| `202 Accepted` | Messung angenommen; die Antwort enthält `accepted`, `created`, eine Ampelbewertung je Phase und insgesamt sowie eine Speicherladeempfehlung. |
+| `422 Unprocessable Entity` | Pflichtfeld fehlt, hat ein ungültiges Format oder liegt außerhalb des erlaubten Wertebereichs. |
+| `403 Forbidden` | Der Standort ist für die Annahme gesperrt. |
+
+Beispielantwort bei Annahme:
 
 ```json
 {
@@ -61,17 +64,14 @@ Bei Erfolg antwortet der Server mit `202 Accepted`:
 }
 ```
 
-`created` ist `false`, wenn derselbe Messwert bereits verarbeitet wurde. Die Statuswerte sind `green`, `yellow` oder `red`; `overall` ist die schlechteste Bewertung einer Phase.
+## Speicherladeempfehlung
 
-`storage_recommendation` ist `charge` bei Überspannung, `discharge` bei Unterspannung und `none` bei normaler Spannung. Liegen Über- und Unterspannung gleichzeitig vor, hat `discharge` Vorrang.
+`storage_recommendation` ist eine direkt aus der übertragenen Messung abgeleitete Empfehlung. Es gibt keinen zusätzlichen API-Aufruf.
 
-| HTTP-Status | Bedeutung |
-| --- | --- |
-| `202` | Messung angenommen |
-| `403` | Der Messpunkt für diese Koordinaten wurde gesperrt |
-| `422` | Request ist unvollständig oder ein Feld verletzt die Validierungsregeln |
-| `5xx` | Temporärer Serverfehler; beim nächsten regulären Intervall erneut senden |
+| Wert | Bedeutung | Bedingung |
+| --- | --- | --- |
+| `discharge` | Speicher entladen | Mindestens eine gemessene Phase liegt unter ihrer unteren Warnschwelle. |
+| `charge` | Speicher laden | Keine Phase liegt unter der unteren Warnschwelle und mindestens eine gemessene Phase liegt über ihrer oberen Warnschwelle. |
+| `none` | Keine Aktion | Alle gemessenen Phasen liegen innerhalb der Warnschwellen. |
 
-## Datenschutz
-
-Die Koordinaten identifizieren den Messpunkt. Die öffentliche Karte zeigt sie gerastert mit etwa 100 Metern Genauigkeit. Sende bei Bedarf leicht versetzte Koordinaten.
+Nicht verfügbare Phasen mit dem Wert `-1` werden ignoriert. Liegen gleichzeitig Unter- und Überspannungen vor, hat `discharge` Vorrang. Die Schwellenwerte entsprechen immer der auf dem Server konfigurierten Spannungsskala.
