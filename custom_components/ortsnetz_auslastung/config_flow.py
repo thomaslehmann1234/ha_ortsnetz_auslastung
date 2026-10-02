@@ -35,7 +35,7 @@ def _settings_schema(hass, values: dict) -> vol.Schema:
     fields = dict([
         _required_field(CONF_API_URL, str, values, "https://www.ortsnetz-auslastung.de"),
         (vol.Required(PHASE_VOLTAGES_SECTION), section(vol.Schema(phase_fields), {"collapsed": False})),
-        _required_field(CONF_GRID_FREQUENCY_ENTITY, entity_selector, values),
+        _optional_field(CONF_GRID_FREQUENCY_ENTITY, entity_selector, values),
         _optional_field(CONF_PLANT_CAPACITY_KWP, vol.All(vol.Coerce(float), vol.Range(min=0.1, max=1000)), values),
         _optional_field(CONF_PV_FORECAST_ENTITY, entity_selector, values),
         _optional_field(CONF_SMARTMETER_MODEL, vol.All(str, vol.Length(max=120)), values),
