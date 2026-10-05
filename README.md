@@ -15,7 +15,7 @@ Nach der ersten erfolgreichen Übertragung legt die Integration zusätzlich die 
 
 - Optional: Eine numerische Forecast-Sensor-Entität mit dem erwarteten PV-Tagesertrag in kWh
 - Eine numerische Sensor-Entität für die Netzfrequenz in Hz, z. B. `50.01`
-- Vom Server-Admin bereitgestellte öffentliche API-Adresse per HTTPS
+- Vom Server-Admin bereitgestellte vollständige API-Endpunkt-URL per HTTPS
 
 Die Integration ist nicht für Werte wie `unknown`, `unavailable` oder Text geeignet. In diesem Fall wird die betreffende Übertragung übersprungen und in den Home-Assistant-Protokollen vermerkt.
 
@@ -56,7 +56,7 @@ Warte, bis Home Assistant wieder vollständig erreichbar ist.
 
    | Feld | Wert |
    | --- | --- |
-   | API-Adresse | `https://www.ortsnetz-auslastung.de` |
+   | API-Endpunkt-URL | `https://www.ortsnetz-auslastung.de/v1/measurements` |
    | Sensor L1 | Sensor-Entität für Phase L1 |
    | Sensor L2 | Sensor-Entität für Phase L2 |
    | Sensor L3 | Sensor-Entität für Phase L3 |
@@ -83,7 +83,7 @@ Nach der Einrichtung sollten die Daten nach spätestens fünf Minuten auf der Ka
 | `Netzfrequenz-Sensor … ist nicht verfügbar` | Der Frequenz-Sensor liefert keinen numerischen Hz-Wert. Entität und Einheit prüfen. |
 | Kein Standort auf der Karte | Mindestens fünf Minuten warten, Karte neu laden und die HA-Protokolle prüfen. Besteht das Problem weiter, Zeitpunkt und Fehlermeldung an den Server-Admin geben. |
 
-API-Adresse, Sensoren, Koordinaten und PV-Angaben können nach der Einrichtung unter **Einstellungen → Geräte & Dienste → Ortsnetz-Auslastung → Konfigurieren** angezeigt und geändert werden. Der Standort wird beim ersten Messwert automatisch aus den Koordinaten erkannt.
+API-Endpunkt-URL, Sensoren, Koordinaten und PV-Angaben können nach der Einrichtung unter **Einstellungen → Geräte & Dienste → Ortsnetz-Auslastung → Konfigurieren** angezeigt und geändert werden. Der Standort wird beim ersten Messwert automatisch aus den Koordinaten erkannt.
 
 ## Datenschutz
 

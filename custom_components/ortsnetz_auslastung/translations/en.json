@@ -5,7 +5,7 @@
         "title": "Local grid utilization",
         "description": "Select the three voltage sensors and the target API.",
         "data": {
-          "api_url": "API URL",
+          "api_url": "API endpoint URL",
           "grid_frequency_entity": "Grid frequency (Hz) – optional",
           "plant_capacity_kwp": "PV system size (kWp) – optional",
           "pv_forecast_entity": "PV forecast today (kWh) – optional",
@@ -33,7 +33,7 @@
         "title": "Configure local grid utilization",
         "description": "Change transmission and sensor settings.",
         "data": {
-          "api_url": "API URL",
+          "api_url": "API endpoint URL",
           "grid_frequency_entity": "Grid frequency (Hz) – optional",
           "plant_capacity_kwp": "PV system size (kWp) – optional",
           "pv_forecast_entity": "PV forecast today (kWh) – optional",

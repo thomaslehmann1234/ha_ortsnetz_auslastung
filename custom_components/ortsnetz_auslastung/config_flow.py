@@ -33,7 +33,7 @@ def _settings_schema(hass, values: dict) -> vol.Schema:
         _required_field(CONF_L3_ENTITY, entity_selector, values),
     ])
     fields = dict([
-        _required_field(CONF_API_URL, str, values, "https://www.ortsnetz-auslastung.de"),
+        _required_field(CONF_API_URL, str, values, "https://www.ortsnetz-auslastung.de/v1/measurements"),
         (vol.Required(PHASE_VOLTAGES_SECTION), section(vol.Schema(phase_fields), {"collapsed": False})),
         _optional_field(CONF_GRID_FREQUENCY_ENTITY, entity_selector, values),
         _optional_field(CONF_PLANT_CAPACITY_KWP, vol.All(vol.Coerce(float), vol.Range(min=0.1, max=1000)), values),
