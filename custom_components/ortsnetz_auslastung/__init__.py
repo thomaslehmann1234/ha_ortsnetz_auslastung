@@ -78,7 +78,9 @@ async def _send(hass: HomeAssistant, entry: ConfigEntry) -> None:
             _LOGGER.warning("Netzfrequenz-Sensor für Ortsnetz-Auslastung ist nicht verfügbar")
         else:
             payload["grid_frequency_hz"] = frequency_hz
-    url = data[CONF_API_URL]
+    url = data[CONF_API_URL].rstrip("/")
+    if not url.endswith("/v1/measurements"):
+        url = f"{url}/v1/measurements"
     session = async_get_clientsession(hass)
     for attempt in range(2):
         try:
