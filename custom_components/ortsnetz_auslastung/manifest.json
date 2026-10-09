@@ -1,7 +1,6 @@
 {
   "domain": "ortsnetz_auslastung",
   "name": "Ortsnetz-Auslastung",
-  "version": "0.4.3",
   "codeowners": [
     "@thomaslehmann1234"
   ],
@@ -9,5 +8,6 @@
   "documentation": "https://github.com/thomaslehmann1234/ha_ortsnetz_auslastung",
   "issue_tracker": "https://github.com/thomaslehmann1234/ha_ortsnetz_auslastung/issues",
   "iot_class": "cloud_push",
-  "requirements": []
+  "requirements": [],
+  "version": "0.4.3"
 }
