@@ -9,5 +9,5 @@
   "iot_class": "cloud_push",
   "issue_tracker": "https://github.com/thomaslehmann1234/ha_ortsnetz_auslastung/issues",
   "requirements": [],
-  "version": "0.4.3"
+  "version": "0.4.5"
 }
