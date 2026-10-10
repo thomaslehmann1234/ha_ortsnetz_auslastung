@@ -6,6 +6,8 @@ Diese Anleitung richtet sich an Personen, die eine Home-Assistant-Instanz betreu
 
 [Ortsnetz-Auslastung](https://www.ortsnetz-auslastung.de) visualisiert Spannungsmessungen, Netzfrequenzen und standortübergreifende Statistiken aus freiwillig teilnehmenden PV-Anlagen in Deutschland.
 
+Für eine Karte der öffentlichen Messpunkte steht zusätzlich das Community-Projekt [Ortsnetz Map](https://github.com/BeGiBue/ha-ortsnetz-auslastung) bereit.
+
 ## Voraussetzungen
 
 - Home Assistant mit installiertem [HACS](https://hacs.xyz/)
@@ -24,6 +26,10 @@ Die drei Phasenspannungen werden zusätzlich auf einen plausiblen Bereich von 15
 > **Wichtig:** Wähle für L1, L2 und L3 immer die Spannungs-Sensoren des Smartmeters deiner PV-Anlage aus. Wähle auch die Netzfrequenz bevorzugt vom selben Smartmeter. Andere Spannungs- oder Frequenzwerte, etwa von Steckdosen, Wechselrichtern oder einzelnen Geräten, bilden die Netzqualität am Anschluss nicht zuverlässig ab und dürfen nicht verwendet werden.
 
 ## 1. Integration über HACS herunterladen
+
+[![Open your Home Assistant instance and open this repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=thomaslehmann1234&repository=ha_ortsnetz_auslastung&category=integration)
+
+Mit dem Button wird dieses Repository direkt in HACS geöffnet. Alternativ manuell:
 
 1. Öffne Home Assistant.
 2. Wähle **HACS**, rechts aus der Menuleiste.
