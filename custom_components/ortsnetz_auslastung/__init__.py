@@ -10,7 +10,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.event import async_track_time_interval
 
-from .const import CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, CONF_SMARTMETER_MODEL, DOMAIN, INTEGRATION_VERSION, MAX_PHASE_VOLTAGE_V, MIN_PHASE_VOLTAGE_V, PLATFORMS, status_signal, storage_recommendation_signal
+from .const import COORDINATE_DECIMALS, CONF_API_URL, CONF_GRID_FREQUENCY_ENTITY, CONF_L1_ENTITY, CONF_L2_ENTITY, CONF_L3_ENTITY, CONF_LATITUDE, CONF_LONGITUDE, CONF_PLANT_CAPACITY_KWP, CONF_PV_FORECAST_ENTITY, CONF_SMARTMETER_MODEL, DOMAIN, INTEGRATION_VERSION, MAX_PHASE_VOLTAGE_V, MIN_PHASE_VOLTAGE_V, PLATFORMS, status_signal, storage_recommendation_signal
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -55,7 +55,7 @@ async def _send(hass: HomeAssistant, entry: ConfigEntry) -> None:
         return
     payload = {
         "observed_at": datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
-        "latitude": data[CONF_LATITUDE], "longitude": data[CONF_LONGITUDE],
+        "latitude": round(data[CONF_LATITUDE], COORDINATE_DECIMALS), "longitude": round(data[CONF_LONGITUDE], COORDINATE_DECIMALS),
         "l1_v": values[0], "l2_v": values[1], "l3_v": values[2],
         "integration_version": INTEGRATION_VERSION,
     }
