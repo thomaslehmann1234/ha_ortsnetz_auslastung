@@ -6,6 +6,7 @@ from unittest.mock import patch
 import aiohttp
 import pytest
 from homeassistant.const import STATE_UNAVAILABLE
+from homeassistant.core import CoreState
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.translation import async_get_translations
 from homeassistant.util import dt as dt_util
@@ -30,6 +31,7 @@ def no_sleep():
 
 
 async def _setup(hass, aioclient_mock, *, language="de", legacy_ids=False, **response):
+    hass.state = CoreState.running
     hass.config.language = language
     for entity_id, value in (("sensor.l1", "230"), ("sensor.l2", "231"), ("sensor.l3", "229")):
         hass.states.async_set(entity_id, value)

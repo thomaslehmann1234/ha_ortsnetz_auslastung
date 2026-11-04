@@ -11,6 +11,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.event import async_track_time_interval
+from homeassistant.helpers.start import async_at_started
 from homeassistant.util.unit_conversion import (
     ApparentPowerConverter,
     ElectricCurrentConverter,
@@ -250,8 +251,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         """Run each send as an entry task so unloading cancels it, including the retry wait."""
         entry.async_create_background_task(hass, _send(hass, entry), f"{DOMAIN}_send_{entry.entry_id}")
 
-    entry.async_on_unload(async_track_time_interval(hass, start_send, timedelta(minutes=5)))
-    start_send()
+    @callback
+    def start_sending(_: HomeAssistant) -> None:
+        """Wait for HA startup before the first send and the five-minute timer."""
+        entry.async_on_unload(async_track_time_interval(hass, start_send, timedelta(minutes=5)))
+        start_send()
+
+    entry.async_on_unload(async_at_started(hass, start_sending))
     return True
 
 
