@@ -1,6 +1,16 @@
 # Ortsnetz-Auslastung für Home-Assistant-Admins
 
-Diese Anleitung richtet sich an Personen, die eine Home-Assistant-Instanz betreuen. Die HACS-Integration sendet die drei Phasenspannungen L1, L2 und L3 sowie den Standort deiner Instanz an die Ortsnetz-Auslastung-API. Nach dem ersten Senden werden die Werte alle fünf Minuten übertragen.
+Diese Anleitung richtet sich an Personen, die eine Home-Assistant-Instanz betreuen. Die HACS-Integration sendet die gemessenen Phasenspannungen und den Standort deiner Instanz an die Ortsnetz-Auslastung-API. Optional lassen sich unter anderem Minimum, Maximum und Durchschnitt der Phasenspannungen und der Netzfrequenz übertragen. Die erste Messung erfolgt nach dem vollständigen Start von Home Assistant, danach alle fünf Minuten.
+
+## Inhalt
+
+- [Voraussetzungen](#voraussetzungen)
+- [Installation über HACS](#1-stabile-integration-über-hacs-herunterladen)
+- [Home Assistant neu starten](#2-home-assistant-neu-starten)
+- [Integration einrichten](#3-integration-einrichten)
+- [Minimum, Maximum und Durchschnitt](#minimum-maximum-und-durchschnitt)
+- [Prüfung und Fehlerbehebung](#prüfung-und-fehlerbehebung)
+- [API-Beschreibung](API.md)
 
 ## Ortsnetz-Auslastung
 
@@ -16,10 +26,10 @@ Für eine Karte der öffentlichen Messpunkte steht zusätzlich das Community-Pro
 Beim Einrichten legt die Integration zusätzlich die Entitäten **Netzspannungsstatus** und **Batteriespeicherempfehlung** an; ihre Werte erscheinen nach der ersten erfolgreichen Übertragung. Der Netzspannungsstatus ist der jeweils schlechteste Phasenstatus (`Normal`, `Warnung` oder `Kritisch`); die Attribute `L1`, `L2` und `L3` zeigen die Einzelbewertungen. Die Batteriespeicherempfehlung ist bei Überspannung `Laden`, bei Unterspannung `Entladen` und bei normaler Spannung `Keine Aktion`. Bei gleichzeitiger Über- und Unterspannung hat `Entladen` Vorrang. Beide Werte kommen in der Antwort der bestehenden Messübertragung zurück und erzeugen keinen zusätzlichen API-Aufruf. Schlägt eine Übertragung auch im zweiten Versuch fehl oder wird sie wegen eines fehlenden oder unplausiblen Spannungswerts übersprungen, sind beide Entitäten nicht verfügbar, bis die API wieder einen gültigen Wert liefert.
 
 - Optional: Eine numerische Forecast-Sensor-Entität mit dem erwarteten PV-Tagesertrag in kWh
-- Eine numerische Sensor-Entität für die Netzfrequenz mit kompatibler Einheit, z. B. `50.01 Hz` oder `50010 mHz`
+- Optional: Eine numerische Sensor-Entität für die Netzfrequenz mit kompatibler Einheit, z. B. `50.01 Hz` oder `50010 mHz`
 - Vom Server-Admin bereitgestellte öffentliche API-Adresse per HTTPS
 
-Die Integration ist nicht für Werte wie `unknown`, `unavailable` oder Text geeignet. In diesem Fall wird die betreffende Übertragung übersprungen und in den Home-Assistant-Protokollen vermerkt.
+Die Integration benötigt numerische Sensorwerte. Liefert ein ausgewählter Phasenspannungs-Sensor `unknown`, `unavailable` oder Text, wird die gesamte Übertragung übersprungen und protokolliert. Fehlende oder ungültige optionale Messwerte werden dagegen einzeln ausgelassen.
 
 Gemessene Phasenspannungen müssen zwischen 150 und 300 V liegen. Liefert ein ausgewählter Sensor genau `-1`, wird diese Phase von der Bewertung ausgeschlossen. Mindestens eine Phase muss einen gültigen Spannungswert liefern; andere ungültige oder nicht verfügbare Werte verhindern weiterhin die Übertragung. Ausgeschlossene Phasen erscheinen in den Statusattributen `L1`, `L2` und `L3` als `unavailable`. Gesamtstatus und Batterieempfehlung bleiben für die gemessenen Phasen verfügbar.
 
@@ -71,9 +81,9 @@ Warte, bis Home Assistant wieder vollständig erreichbar ist.
    | Anlagengröße (kWp) | Optional, für die Forecast-Übertragung erforderlich. Tatsächlich installierte Nennleistung der PV-Anlage in Kilowatt-Peak, z. B. `9.8` mit Punkt als Trenner. |
    | PV-Forecast heute (kWh) | Optionaler Forecast-Sensor für den erwarteten PV-Ertrag des aktuellen Tages; wird nur mit konfigurierter Anlagengröße übertragen |
    | Smartmeter Hersteller / Typ | Optionales, durchsuchbares Dropdown mit freier Eingabe (maximal 120 Zeichen). Vorhandene eigene Einträge bleiben erhalten. Die Angabe wird nur im Adminbereich der Ortsnetz-Auslastung angezeigt. |
-   | Netzfrequenz (Hz) | Frequenz-Sensor des Smartmeters; Hz, mHz und kHz werden automatisch in Hz umgerechnet |
+   | Netzfrequenz (Hz) | Optionaler Frequenz-Sensor des Smartmeters; Hz, mHz und kHz werden automatisch in Hz umgerechnet |
    | Batterie-Ladezustand / SOC (%) | Optionaler Sensor für den aktuellen Ladezustand, 0 bis 100 % |
-   | Nutzbare Batteriekapazität (kWh) | Optional. Tatsächliche nutzbare Kapazität eintragen, nicht den aktuellen Energieinhalt. Kein Wert ist vorbelegt. |
+   | Nutzbare Batteriekapazität (kWh) | Optional, 0 bis einschließlich 150 kWh; Dezimalwerte sind erlaubt. Tatsächliche nutzbare Kapazität eintragen, nicht den aktuellen Energieinhalt. Kein Wert ist vorbelegt. `0` ist ein gültiger Wert, ein leeres Feld entfernt die Angabe. |
    | Netzleistung gesamt (W) | Optionaler Sensor für die gesamte Wirkleistung am Hausanschluss: positiv = Netzbezug, negativ = Einspeisung |
    | Breitengrad / Längengrad | Standardmäßig der Home-Assistant-Standort; bei Bedarf überschreiben |
 
@@ -88,10 +98,33 @@ SOC, Batteriekapazität und Netzleistung sind für alle Nutzer direkt sichtbar u
 | Leistungsfaktor gesamt | Vorhandener Sensor mit einem Wert von 0 bis 1 oder in Prozent |
 | Scheinleistung gesamt | Vorhandener Sensor in VA oder kVA |
 | Stromstärke L1, L2, L3 | Je ein vorhandener Sensor in A oder mA |
-| Spannung L1, L2, L3: Minimum, Maximum, Mittelwert | Je ein vorhandener 5-Minuten-Statistiksensor mit kompatibler Spannungseinheit, z. B. V oder mV |
-| Netzfrequenz: Minimum, Maximum, Mittelwert | Je ein vorhandener 5-Minuten-Statistiksensor in Hz, mHz oder kHz |
+| [Spannung L1, L2, L3: Minimum, Maximum, Durchschnitt](#minimum-maximum-und-durchschnitt) | Je ein vorhandener 5-Minuten-Statistiksensor mit kompatibler Spannungseinheit, z. B. V oder mV |
+| [Netzfrequenz: Minimum, Maximum, Durchschnitt](#minimum-maximum-und-durchschnitt) | Je ein vorhandener 5-Minuten-Statistiksensor in Hz, mHz oder kHz |
 
-Alle Felder können leer bleiben. Die Integration liest nur die zugeordneten Sensorzustände und fragt keine zusätzlichen Geräte ab. Sie berechnet keine eigenen Min/Max/Mittelwerte; die ausgewählten Statistiksensoren müssen diese über dasselbe fünfminütige Messintervall liefern. Netzleistung darf nicht durch Wechselrichterleistung oder die Leistung nur einer Phase ersetzt werden. Sensoren mit umgekehrtem Vorzeichen müssen vor der Auswahl passend umgerechnet werden. kW werden nach W, kVA nach VA, mA nach A und ein Leistungsfaktor in Prozent nach 0 bis 1 umgerechnet.
+Alle zusätzlichen Messfelder können leer bleiben. Die Integration liest nur die zugeordneten Sensorzustände und fragt keine zusätzlichen Geräte ab. Netzleistung darf nicht durch Wechselrichterleistung oder die Leistung nur einer Phase ersetzt werden. Sensoren mit umgekehrtem Vorzeichen müssen vor der Auswahl passend umgerechnet werden. kW werden nach W, kVA nach VA, mA nach A und ein Leistungsfaktor in Prozent nach 0 bis 1 umgerechnet.
+
+### Minimum, Maximum und Durchschnitt
+
+Für jede Phase L1, L2 und L3 sowie für die Netzfrequenz gibt es drei optionale Statistikfelder. **Durchschnitt**, **Mittelwert** und die englische Beschriftung **Mean** bezeichnen hier denselben Wert; das API-Feld endet auf `_avg`.
+
+1. Öffne bei der Einrichtung oder unter **Einstellungen → Geräte & Dienste → Ortsnetz-Auslastung → Konfigurieren** den Bereich **Weitere Messfelder (optional)**.
+2. Ordne jedem gewünschten Minimum-, Maximum- und Mittelwert-Feld einen vorhandenen Statistiksensor zu.
+3. Speichere die Konfiguration. Die Werte werden mit der nächsten gültigen Messung übertragen.
+
+| Messgröße | Minimum: API-Feld | Maximum: API-Feld | Durchschnitt: API-Feld | Übertragene Einheit |
+| --- | --- | --- | --- | --- |
+| Spannung L1 | `l1_v_min` | `l1_v_max` | `l1_v_avg` | V |
+| Spannung L2 | `l2_v_min` | `l2_v_max` | `l2_v_avg` | V |
+| Spannung L3 | `l3_v_min` | `l3_v_max` | `l3_v_avg` | V |
+| Netzfrequenz | `grid_frequency_hz_min` | `grid_frequency_hz_max` | `grid_frequency_hz_avg` | Hz |
+
+Die Integration berechnet diese Statistiken **nicht selbst**. Die ausgewählten Sensoren müssen Minimum, Maximum und arithmetischen Durchschnitt über dasselbe **fünfminütige Messintervall** bereitstellen. Tageswerte oder Werte seit dem letzten Gerätestart passen nicht zu diesem Intervall. Die Sensoren für die aktuellen Phasenspannungen bleiben unabhängig davon erforderlich; Statistikwerte ersetzen sie nicht.
+
+Du kannst auch nur einzelne Statistikfelder zuordnen; nicht vorhandene Werte bleiben leer. Alle verfügbaren Werte einer Messgröße müssen `Minimum <= Durchschnitt <= Maximum` erfüllen, auch wenn nur zwei Werte vorhanden sind. Bei einem Widerspruch lässt die Integration die Statistikfelder dieser Messgröße weg und schreibt einen Hinweis ins Protokoll; die übrige Messung wird weiterhin gesendet.
+
+Für Spannungsstatistiken sind Werte größer 0 bis einschließlich 500 V zulässig; `-1` kennzeichnet einen nicht gemessenen Wert. Frequenzstatistiken müssen zwischen 45 und 55 Hz liegen; dort ist `-1` nicht zulässig. Fehlende Statistikwerte werden nicht durch `0` ersetzt. Die vollständige Feldbeschreibung steht in der [API-Dokumentation](API.md#dynamische-messwerte).
+
+### Einheiten und Validierung
 
 Spannung und Netzfrequenz werden anhand des Sensorattributs `unit_of_measurement` automatisch in V beziehungsweise Hz umgerechnet: beispielsweise `230000 mV → 230 V` und `50010 mHz → 50.01 Hz`. Auch kV und µV sowie kHz werden unterstützt. Das gilt ebenso für die optionalen Minimum-, Maximum- und Mittelwerte. Die Plausibilitätsprüfung erfolgt nach der Umrechnung. Numerische Sensorwerte ohne Einheit werden weiterhin als V beziehungsweise Hz behandelt; der Wert `-1` bleibt bei Spannungen der Marker für eine nicht gemessene Phase.
 
@@ -99,7 +132,9 @@ Fehlende oder ungültige optionale Werte werden mit einem Protokollhinweis ausge
 
 Bei einer Basis-URL ergänzt die Integration automatisch `/v1/measurements`. Eine bereits vollständige Endpunkt-URL bleibt unverändert.
 
-Die Integration sendet sofort einen ersten Datensatz und danach alle fünf Minuten. Die Kartenansicht aktualisiert sich im Live-Modus alle 15 Minuten; ein manuelles Neuladen zeigt den neuen Standort sofort.
+### Übertragung und Änderungen
+
+Die Integration wartet beim HA-Neustart auf den vollständigen Start von Home Assistant. Danach sendet sie die erste Messung und startet den Fünf-Minuten-Timer. Ist Home Assistant bei der Einrichtung oder beim Neuladen der Integration bereits gestartet, wird sofort gesendet. Einzelne Sensoren können trotzdem noch nicht verfügbar sein; dafür gelten weiterhin die beschriebenen Prüfungen. Die Kartenansicht aktualisiert sich im Live-Modus alle 15 Minuten; ein manuelles Neuladen zeigt den neuen Standort sofort.
 
 PV-Forecast und Anlagengröße können leer bleiben. Ohne konfigurierte Anlagengröße lässt die Integration einen ausgewählten Forecast weg und schreibt einen Hinweis ins Protokoll; die Spannungswerte werden weiterhin übertragen. Dasselbe gilt für Forecasts über dem API-Limit von 10 kWh je kWp pro Tag. Bei gültigen Angaben wird der spezifische Forecast-Ertrag als `Forecast (kWh) ÷ Anlagengröße (kWp) = kWh/kWp/Tag` berechnet. Die Integration verlässt sich nicht auf eine möglicherweise bereits serverseitig gespeicherte Anlagengröße, sondern sendet die konfigurierte Größe zusammen mit dem Forecast.
 
